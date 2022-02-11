@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ladder
+    uniqueID: 2569034283
+    locked: 0
   - name: Ground
     uniqueID: 3793646671
     locked: 0
