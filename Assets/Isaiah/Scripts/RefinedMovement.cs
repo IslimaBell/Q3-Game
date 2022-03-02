@@ -126,7 +126,7 @@ public class RefinedMovement : MonoBehaviour
         if (Input.GetAxis("Horizontal") > 0.01f)
         {
             //sr.flipX = false;
-            Debug.Log("R");
+            //Debug.Log("R");
             animator.SetBool("IsMoving", true);
             rb.AddForce(new Vector2(moveSpeed, 0));
         }
@@ -135,13 +135,13 @@ public class RefinedMovement : MonoBehaviour
 
             //Move left
             //sr.flipX = true;
-            Debug.Log("L");
+            //Debug.Log("L");
             rb.AddForce(new Vector2(-moveSpeed, 0));
             animator.SetBool("IsMoving", true);
         }
         else
         {
-            Debug.Log("IDLE");
+            //Debug.Log("IDLE");
             animator.SetBool("IsMoving", false);
         }
         Flip();
