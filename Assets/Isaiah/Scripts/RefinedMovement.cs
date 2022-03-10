@@ -44,6 +44,13 @@ public class RefinedMovement : MonoBehaviour
     public Collider2D weaponCollider;
     private bool hammertime = false;
 
+    //SoundEffects
+    private AudioSource jumpSound;
+
+    //Music
+    public AudioSource mainTheme;
+    public AudioSource HammerTheme;
+
 
     public bool ClimbingAllowed { get; set; }
 
@@ -53,6 +60,7 @@ public class RefinedMovement : MonoBehaviour
         extraJumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        jumpSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -62,15 +70,19 @@ public class RefinedMovement : MonoBehaviour
         if(Input.GetButtonDown("Jump") && IsGrounded() == true && extraJumps > 0 ) // Jump
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-            
+            jumpSound.Play();
             extraJumps--;
         }
 
-     
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpSound.Play();
+        }
 
         if (Input.GetButtonDown("Jump") && IsGrounded() == false && extraJumps > 1)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpSound.Play();
             extraJumps--;
         }
 
@@ -144,8 +156,7 @@ public class RefinedMovement : MonoBehaviour
             //Debug.Log("IDLE");
             animator.SetBool("IsMoving", false);
         }
-        Flip();
-        
+        Flip();       
     }
     
 
@@ -192,14 +203,20 @@ public class RefinedMovement : MonoBehaviour
             weapon.enabled = true;
             weaponCollider.enabled = true;
             hammertime = true;
+            mainTheme.Stop();
+            HammerTheme.Play();
             StartCoroutine(rampage());
         }
         
     }
+    
+   
 
     IEnumerator rampage()
     {
         yield return new WaitForSeconds(6);
+        HammerTheme.Stop();
+        mainTheme.Play();
         weapon.enabled = false;
         weaponCollider.enabled = false;
         hammertime = false;
