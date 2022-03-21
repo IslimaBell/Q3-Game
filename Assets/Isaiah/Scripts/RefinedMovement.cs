@@ -214,7 +214,7 @@ public class RefinedMovement : MonoBehaviour
 
     IEnumerator rampage()
     {
-        yield return new WaitForSeconds(6);
+        yield return new WaitForSeconds(8);
         HammerTheme.Stop();
         mainTheme.Play();
         weapon.enabled = false;
