@@ -39,7 +39,7 @@ public class Barrel : MonoBehaviour
         if (other.tag == "Player")
         {
                 player.GetComponent<RefinedMovement>().enabled = false;                                
-                //animator.SetBool("IsDead", true);
+                animator.SetBool("IsDead", true);
                 StartCoroutine(RespawningLevel());
         }
         
