@@ -20,6 +20,7 @@ public class EndLevel : MonoBehaviour
 
     IEnumerator Upload()
     {
+        /*
         WWWForm form = new WWWForm();
         // form.AddField("myField", "myData");
         form.AddField("groupid", groupID);
@@ -41,9 +42,12 @@ public class EndLevel : MonoBehaviour
                 Debug.Log("Form upload complete!");
             }
         }
+        */
 
-        yield return new WaitForSeconds(3);
-        SceneManager.LoadScene("Win");
+        Debug.Log("Waiting...");
+        yield return new WaitForSeconds(2);
+        Debug.Log("done");
+        
 
     }
 
@@ -53,6 +57,7 @@ public class EndLevel : MonoBehaviour
         {
             Destroy(gameObject);
             Debug.Log("PUSHING DATA....");
+            SceneManager.LoadScene("Win");
             StartCoroutine(Upload()); 
             
             

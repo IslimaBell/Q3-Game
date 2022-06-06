@@ -50,6 +50,8 @@ public class RefinedMovement : MonoBehaviour
     //Music
     public AudioSource mainTheme;
     public AudioSource HammerTheme;
+    public AudioSource DeathSound;
+    public bool isDead;
 
 
     public bool ClimbingAllowed { get; set; }
@@ -66,7 +68,16 @@ public class RefinedMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isDead == true)
+        {
+            Debug.Log(isDead);
+            //mainTheme.Stop();
+            //HammerTheme.Stop();
+
+            DeathSound.Play();
+            isDead = false;
+        }
+
         if(Input.GetButtonDown("Jump") && IsGrounded() == true && extraJumps > 0 ) // Jump
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
@@ -156,7 +167,9 @@ public class RefinedMovement : MonoBehaviour
             //Debug.Log("IDLE");
             animator.SetBool("IsMoving", false);
         }
-        Flip();       
+        Flip();
+
+       
     }
     
 
@@ -178,13 +191,15 @@ public class RefinedMovement : MonoBehaviour
         if (ClimbingAllowed) //Climbing
         {
             animator.SetBool("IsClimbing", true);
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
+            rb.gravityScale = 0;
             rb.velocity = new Vector2(horizontal * moveSpeed, dirY);           
         }
         else
         {
             animator.SetBool("IsClimbing", false);
-            rb.isKinematic = false;
+            //rb.isKinematic = false;
+            rb.gravityScale = 1;
             rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);         
         }
     }
@@ -210,8 +225,6 @@ public class RefinedMovement : MonoBehaviour
         
     }
     
-   
-
     IEnumerator rampage()
     {
         yield return new WaitForSeconds(8);

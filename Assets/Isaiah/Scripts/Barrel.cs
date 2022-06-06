@@ -8,6 +8,7 @@ public class Barrel : MonoBehaviour
 {
 
     public GameObject player;
+    public RefinedMovement RM;
     public Animator animator;
 
 
@@ -38,9 +39,12 @@ public class Barrel : MonoBehaviour
              
         if (other.tag == "Player")
         {
-                player.GetComponent<RefinedMovement>().enabled = false;                                
-                animator.SetBool("IsDead", true);
-                StartCoroutine(RespawningLevel());
+            player.GetComponent<RefinedMovement>().enabled = false;
+            RM.isDead = true;
+            RM.mainTheme.Stop();
+            RM.DeathSound.Play();
+            animator.SetBool("IsDead", true);
+            StartCoroutine(RespawningLevel());
         }
         
     }
