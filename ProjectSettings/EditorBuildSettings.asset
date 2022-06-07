@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Andrea/sceene/A_Bit_of_Froog.unity
+    guid: fad8eb9be961077479d07daf97a8929b
   m_configObjects: {}

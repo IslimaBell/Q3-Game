@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Oil
+  - Playet
+  - Lillypad
   layers:
   - Default
   - TransparentFX
@@ -44,6 +46,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 3793646671
+    locked: 0
+  - name: other
+    uniqueID: 87846279
     locked: 0
   - name: Player
     uniqueID: 2319428549
