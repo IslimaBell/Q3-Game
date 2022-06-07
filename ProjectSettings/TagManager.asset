@@ -5,8 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Oil
+<<<<<<< HEAD
   - Playet
   - Lillypad
+=======
+  - Hammer
+>>>>>>> 2d86b742fa86cf10fb3de306ab73bf3421fe032c
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RefinedMovement : MonoBehaviour
 {
+
+    //jump
     float coyoteRemember = 0;
     [SerializeField]
     float coyoteTime = 0.25f;
@@ -22,6 +24,7 @@ public class RefinedMovement : MonoBehaviour
     [SerializeField]
     private float jumpPower = 1f;
 
+    //move
     private float horizontal;
     [SerializeField]
     private float moveSpeed = 1f;
@@ -29,10 +32,27 @@ public class RefinedMovement : MonoBehaviour
     private float dirY;
     Rigidbody2D rb;
 
+    //facing
     private bool facingRight = true;
     private SpriteRenderer sr;
 
+    //Animate
     public Animator animator;
+
+    //Weapon
+    public SpriteRenderer weapon;
+    public Collider2D weaponCollider;
+    private bool hammertime = false;
+
+    //SoundEffects
+    private AudioSource jumpSound;
+
+    //Music
+    public AudioSource mainTheme;
+    public AudioSource HammerTheme;
+    public AudioSource DeathSound;
+    public bool isDead;
+
 
     public bool ClimbingAllowed { get; set; }
 
@@ -42,21 +62,38 @@ public class RefinedMovement : MonoBehaviour
         extraJumps = extraJumpsValue;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        jumpSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        if(Input.GetButtonDown("Jump") && IsGrounded() == true && extraJumps > 0) // Jump
+        if (isDead == true)
+        {
+            Debug.Log(isDead);
+            //mainTheme.Stop();
+            //HammerTheme.Stop();
+
+            DeathSound.Play();
+            isDead = false;
+        }
+
+        if(Input.GetButtonDown("Jump") && IsGrounded() == true && extraJumps > 0 ) // Jump
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpSound.Play();
             extraJumps--;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpSound.Play();
         }
 
         if (Input.GetButtonDown("Jump") && IsGrounded() == false && extraJumps > 1)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpSound.Play();
             extraJumps--;
         }
 
@@ -71,8 +108,15 @@ public class RefinedMovement : MonoBehaviour
         if(IsGrounded() == true)
         {
             extraJumps = extraJumpsValue;
+            animator.SetBool("IsGrounded", true);
         }
-        
+
+        if (IsGrounded() == false)
+        {
+            
+            animator.SetBool("IsGrounded", false);
+        }
+
         coyoteRemember -= Time.deltaTime;
         if (IsGrounded())
         {
@@ -102,19 +146,30 @@ public class RefinedMovement : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal"); //Movement
         //Debug.Log(horizontal);
         //Move right
-        if (Input.GetAxis("Horizontal") > 0)
+        if (Input.GetAxis("Horizontal") > 0.01f)
         {
-            sr.flipX = false;
+            //sr.flipX = false;
+            //Debug.Log("R");
+            animator.SetBool("IsMoving", true);
             rb.AddForce(new Vector2(moveSpeed, 0));
         }
-
-        //Move left
-        if (Input.GetAxis("Horizontal") < 0)
+        else if (Input.GetAxis("Horizontal") < -0.01f)
         {
-            sr.flipX = true;
+
+            //Move left
+            //sr.flipX = true;
+            //Debug.Log("L");
             rb.AddForce(new Vector2(-moveSpeed, 0));
+            animator.SetBool("IsMoving", true);
+        }
+        else
+        {
+            //Debug.Log("IDLE");
+            animator.SetBool("IsMoving", false);
         }
         Flip();
+
+       
     }
     
 
@@ -136,13 +191,15 @@ public class RefinedMovement : MonoBehaviour
         if (ClimbingAllowed) //Climbing
         {
             animator.SetBool("IsClimbing", true);
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
+            rb.gravityScale = 0;
             rb.velocity = new Vector2(horizontal * moveSpeed, dirY);           
         }
         else
         {
             animator.SetBool("IsClimbing", false);
-            rb.isKinematic = false;
+            //rb.isKinematic = false;
+            rb.gravityScale = 1;
             rb.velocity = new Vector2(horizontal * moveSpeed, rb.velocity.y);         
         }
     }
@@ -152,5 +209,29 @@ public class RefinedMovement : MonoBehaviour
         bool grounded = Physics2D.BoxCast(transform.position + new Vector3(0f, 0f, 0f), new Vector3(0.1f, 0.7f, 0f), 0, Vector2.down, 0.7f, ground);
         
         return grounded;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Hammer")
+        {
+            weapon.enabled = true;
+            weaponCollider.enabled = true;
+            hammertime = true;
+            mainTheme.Stop();
+            HammerTheme.Play();
+            StartCoroutine(rampage());
+        }
+        
+    }
+    
+    IEnumerator rampage()
+    {
+        yield return new WaitForSeconds(8);
+        HammerTheme.Stop();
+        mainTheme.Play();
+        weapon.enabled = false;
+        weaponCollider.enabled = false;
+        hammertime = false;
     }
 }
