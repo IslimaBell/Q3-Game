@@ -39,12 +39,13 @@ public class Barrel : MonoBehaviour
              
         if (other.tag == "Player")
         {
-            player.GetComponent<RefinedMovement>().enabled = false;
+            StartCoroutine(RespawningLevel());
             RM.isDead = true;
             RM.mainTheme.Stop();
             RM.DeathSound.Play();
+            player.GetComponent<RefinedMovement>().enabled = false;
             animator.SetBool("IsDead", true);
-            StartCoroutine(RespawningLevel());
+            
         }
         
     }
@@ -64,6 +65,8 @@ public class Barrel : MonoBehaviour
 
     IEnumerator RespawningLevel()
     {
+        RM.mainTheme.Stop();
+        RM.DeathSound.Play();
         yield return new WaitForSeconds(3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

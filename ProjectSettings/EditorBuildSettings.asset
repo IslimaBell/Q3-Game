@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Isaiah/Win.unity
     guid: d105ba04fac0f4d47bdd1b98d3de6f94
+  - enabled: 1
+    path: Assets/Isaiah/Credits.unity
+    guid: c2047f1756b2c9445917fcf9559be7b8
   m_configObjects: {}
